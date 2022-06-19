@@ -2,7 +2,7 @@ package drawing;
 
 import javax.swing.JPanel;
 
-
+import geometry.Point;
 import geometry.Shape;
 
 import java.awt.Graphics;
@@ -37,5 +37,24 @@ public class PnlDrawing extends JPanel {
 	
 	public void addShape(Shape sh) {
 		shapes.add(sh);
+	}
+	
+	//boolean type for confirming if an object was selected or not
+	//early return ensures we can only select one object at a time
+	//decreasing the iterator instead of increasing it ensures we select the objects on top first
+	public boolean select(Point p) {
+		for (int i = shapes.size() - 1; i >= 0; i--) {
+			if (shapes.get(i).contains(p.getX(), p.getY())) {
+				shapes.get(i).setSelected(true);
+				return true;
+			}
+		}			
+		return false;
+	}
+	
+	public void deselectAll() {
+		for (int i = 0; i < shapes.size(); i++) {
+			shapes.get(i).setSelected(false);
+		}
 	}
 }

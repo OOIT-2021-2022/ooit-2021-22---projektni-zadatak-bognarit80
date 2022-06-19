@@ -22,5 +22,8 @@ public abstract class Shape implements Moveable, Comparable {
 		this.selected = selected;
 	}
 	
+	public abstract boolean contains(int x, int y);
+	
 	public abstract void draw(Graphics g);
+	
 }

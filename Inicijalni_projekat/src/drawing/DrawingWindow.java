@@ -10,8 +10,10 @@ import java.awt.GridBagLayout;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import javax.swing.JLabel;
+import javax.swing.AbstractButton;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
+import javax.swing.ButtonModel;
 
 import java.awt.GridLayout;
 import javax.swing.JButton;
@@ -24,11 +26,22 @@ import java.awt.Component;
 import java.awt.Rectangle;
 import java.awt.Insets;
 import javax.swing.border.LineBorder;
+
+import geometry.Point;
+
 import java.awt.Color;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.Enumeration;
+import java.awt.event.MouseMotionAdapter;
 
 public class DrawingWindow extends JFrame {
 	
+	//draw or select
 	private ButtonGroup btnAction = new ButtonGroup();
+	//edit, delete or delete all, grouped for easier changing
+	private ButtonGroup btnModify = new ButtonGroup();
+	//the desired shape
 	private ButtonGroup btnShape = new ButtonGroup();
 
 	private JPanel contentPane;
@@ -48,6 +61,8 @@ public class DrawingWindow extends JFrame {
 			}
 		});
 	}
+	
+	
 
 	/**
 	 * Create the frame.
@@ -62,12 +77,14 @@ public class DrawingWindow extends JFrame {
 		contentPane.setLayout(new BorderLayout(0, 0));
 		
 		PnlDrawing pnlDrawing = new PnlDrawing();
+		
+		
 		pnlDrawing.setBorder(new EmptyBorder(0, 0, 5, 5));
 		contentPane.add(pnlDrawing, BorderLayout.CENTER);
 		pnlDrawing.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		JPanel leftPanel = new JPanel();
-		leftPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+		leftPanel.setBorder(new EmptyBorder(10, 5, 10, 10));
 		contentPane.add(leftPanel, BorderLayout.WEST);
 		GridBagLayout gbl_leftPanel = new GridBagLayout();
 		gbl_leftPanel.columnWidths = new int[]{89, 0};
@@ -103,6 +120,7 @@ public class DrawingWindow extends JFrame {
 		gbc_btnEdit.gridx = 0;
 		gbc_btnEdit.gridy = 3;
 		leftPanel.add(btnEdit, gbc_btnEdit);
+		btnModify.add(btnEdit);
 		
 		JButton btnDelete = new JButton("Delete");
 		btnDelete.setEnabled(false);
@@ -112,6 +130,7 @@ public class DrawingWindow extends JFrame {
 		gbc_btnDelete.gridx = 0;
 		gbc_btnDelete.gridy = 4;
 		leftPanel.add(btnDelete, gbc_btnDelete);
+		btnModify.add(btnDelete);
 		
 		JButton btnClearAll = new JButton("Clear all");
 		btnClearAll.setEnabled(false);
@@ -121,6 +140,7 @@ public class DrawingWindow extends JFrame {
 		gbc_btnClearAll.gridx = 0;
 		gbc_btnClearAll.gridy = 5;
 		leftPanel.add(btnClearAll, gbc_btnClearAll);
+		btnModify.add(btnClearAll);
 		
 		JToggleButton btnPoint = new JToggleButton("Point");
 		btnPoint.setSelected(true);
@@ -177,10 +197,47 @@ public class DrawingWindow extends JFrame {
 		topPanel.add(lblPaint);
 		
 		JLabel lblTotalObjects = new JLabel("Total objects:");
+		lblTotalObjects.setBorder(new EmptyBorder(0, 10, 0, 0));
 		topPanel.add(lblTotalObjects);
 		
 		JLabel lblXY = new JLabel("X: Y:");
+		lblXY.setBorder(new EmptyBorder(0, 10, 0, 0));
 		topPanel.add(lblXY);
+		
+		//performed when clicking on the canvas
+		pnlDrawing.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				//store the coords of our click in clickPos
+				Point clickPos = new Point(e.getX(), e.getY());
+				
+				pnlDrawing.deselectAll();
+				setEditButtons(false);
+				
+				if (btnAction.getSelection() == btnSelect) {
+					//select(Point p) returns true if an object was selected
+					setEditButtons(pnlDrawing.select(clickPos));
+					return;
+				}								
+			}
+		});
+		
+		pnlDrawing.addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseMoved(MouseEvent e) {
+				//update the coords text every time the mouse moves inside the canvas
+				lblXY.setText("X: " + Integer.toString(e.getX()) + " , Y: " + Integer.toString(e.getY()));
+			}
+		});
+	}
+	
+	public void setEditButtons(boolean b) {
+		//Enumeration is just an old Iterator type
+		//AbstractButton is the parent class of the buttons
+		for (Enumeration<AbstractButton> e = btnModify.getElements(); e.hasMoreElements();) {
+			e.nextElement().setEnabled(b);
+		}
+		
 	}
 
 }
