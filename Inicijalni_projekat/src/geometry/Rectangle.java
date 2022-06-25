@@ -34,6 +34,15 @@ public class Rectangle extends Shape2D {
 		this.selected = selected;
 	}
 	
+	public Rectangle(Point p1, Point p2, Color edgeColor, Color fillColor) {
+		this.upperLeftPoint = new Point(Math.min(p1.getX(), p2.getX()), Math.min(p1.getY(), p2.getY()));
+		Point bottomLeftPoint = new Point(Math.max(p1.getX(), p2.getX()), Math.max(p1.getY(), p2.getY()));
+		this.width = bottomLeftPoint.getX() - this.upperLeftPoint.getX();
+		this.height = bottomLeftPoint.getY() - this.upperLeftPoint.getY();
+		this.color = edgeColor;
+		this.fillColor = fillColor;
+	}
+	
 	public double area() {
 		return (this.height * this.width);
 	}
@@ -54,16 +63,24 @@ public class Rectangle extends Shape2D {
 		return this.height;
 	}
 
-	public void setHeight(int height) {
-		this.height = height;
+	public void setHeight(int height) throws IllegalArgumentException {
+		if(height < 0) {
+			throw new IllegalArgumentException("Height cannot be negative!");
+		} else {
+			this.height = height;
+		}
 	}
 
 	public int getWidth() {
 		return this.width;
 	}
 
-	public void setWidth(int width) {
-		this.width = width;
+	public void setWidth(int width) throws IllegalArgumentException {
+		if(width < 0) {
+			throw new IllegalArgumentException("Width cannot be negative!");
+		} else {
+			this.width = width;
+		}
 	}
 	
 	@Override

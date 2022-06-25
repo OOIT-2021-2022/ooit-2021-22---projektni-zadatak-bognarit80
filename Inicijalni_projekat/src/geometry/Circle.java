@@ -28,6 +28,13 @@ public class Circle extends Shape2D {
 		this.selected = selected;
 	}
 	
+	public Circle(Point center, Point radius, Color edgeColor, Color fillColor) {
+		this.center = center;
+		this.radius = (int) this.center.distance(radius.getX(), radius.getY());
+		this.color = edgeColor;
+		this.fillColor = fillColor;
+	}
+	
 	public double area() {
 		return this.radius * this.radius * Math.PI;
 	}
@@ -40,11 +47,12 @@ public class Circle extends Shape2D {
 		return this.radius;
 	}
 
-	public void setRadius(int radius) throws Exception {
+	public void setRadius(int radius) throws IllegalArgumentException {
 		if(radius < 0) {
-			throw new Exception("Radius cannot be negative!");
+			throw new IllegalArgumentException("Radius cannot be negative!");
+		} else {
+			this.radius = radius;
 		}
-		this.radius = radius;
 	}
 
 	public Point getCenter() {
