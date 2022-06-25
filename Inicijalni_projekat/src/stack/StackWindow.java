@@ -28,6 +28,9 @@ public class StackWindow extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
+	/**
+	 * The DefaultListModel for the JList to display.
+	 */
 	private DefaultListModel<Circle> dlm = new DefaultListModel<Circle>();
 
 	/**

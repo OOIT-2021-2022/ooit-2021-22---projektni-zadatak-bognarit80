@@ -31,7 +31,14 @@ public class SortWindow extends JFrame {
 
 	private JPanel contentPane;
 	
+	/**
+	 * The ArrayList of Circles to sort.
+	 */
 	private ArrayList<Circle> list = new ArrayList<>();
+	
+	/**
+	 * The DefaultListModel for the JList to display.
+	 */
 	private DefaultListModel<Circle> dlm = new DefaultListModel<Circle>();
 
 	/**
@@ -104,6 +111,11 @@ public class SortWindow extends JFrame {
 		
 	}
 	
+	/**
+	 * Sorts the DefaultListModel, then returns it sorted, by firstly clearing itself
+	 * and then adding each element from the sorted ArrayList.
+	 * @return A sorted DefaultListModel
+	 */
 	public DefaultListModel<Circle> getSortedModel() {
 		Iterator<Circle> it = list.iterator();
 		dlm.clear();

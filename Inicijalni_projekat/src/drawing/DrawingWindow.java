@@ -61,6 +61,7 @@ public class DrawingWindow extends JFrame {
 	private Color edgeColor = Color.BLACK;
 	private Color fillColor = Color.WHITE;
 	
+	//used for moving functionality
 	private int lastX = 0;
 	private int lastY = 0;
 
@@ -334,6 +335,7 @@ public class DrawingWindow extends JFrame {
 		topPanel.add(lblTotalShapes, gbc_lblTotalShapes);
 		
 		JLabel lblXY = new JLabel("X: Y:");
+		lblXY.setToolTipText("Current coordinates of the mouse.");
 		lblXY.setBorder(new EmptyBorder(0, 10, 0, 0));
 		GridBagConstraints gbc_lblXY = new GridBagConstraints();
 		gbc_lblXY.insets = new Insets(0, 0, 0, 5);
@@ -374,7 +376,7 @@ public class DrawingWindow extends JFrame {
 				//store the coords of our click in clickPos
 				Point clickPos = new Point(e.getX(), e.getY());				
 				
-				//ctrl selects objects regardless of select btn state
+				//ctrl selects objects regardless of select btn state (by design)
 				//also allows multiple objects selection
 				if (e.isControlDown()) {
 					if (pnlDrawing.select(clickPos)) {
@@ -485,6 +487,7 @@ public class DrawingWindow extends JFrame {
 					if (dlgDonut.getDonut() != null) {
 						pnlDrawing.addShape(dlgDonut.getDonut());
 					}
+					startingPoint = null;
 				}
 				
 				//pass the drawing panel object and the label to edit to include new elements
@@ -492,6 +495,7 @@ public class DrawingWindow extends JFrame {
 			}
 			@Override
 			public void mousePressed(MouseEvent e) {
+				//before we start moving, we store the click coords to compare the distance to
 				lastX = e.getX();
 				lastY = e.getY();
 			}
@@ -505,7 +509,7 @@ public class DrawingWindow extends JFrame {
 			}
 			@Override
 			public void mouseDragged(MouseEvent e) {
-
+				//move the selected objects only if shift is held
 				if (e.isShiftDown()) {
 					if(lastX != 0 && lastY != 0) {
 						pnlDrawing.moveSelected(e.getX() - lastX, e.getY() - lastY);
