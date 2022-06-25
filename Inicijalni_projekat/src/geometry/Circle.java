@@ -3,7 +3,7 @@ package geometry;
 import java.awt.Color;
 import java.awt.Graphics;
 
-public class Circle extends Shape {
+public class Circle extends Shape2D {
 	
 	private int radius;
 	private Point center;
@@ -15,6 +15,17 @@ public class Circle extends Shape {
 	public Circle(Point center, int radius) {
 		this.radius = radius;
 		this.center = center;
+	}
+	
+	public Circle(Point center, int radius, Color edgeColor, Color fillColor) {
+		this(center, radius);
+		this.color = edgeColor;
+		this.fillColor = fillColor;
+	}
+	
+	public Circle(Point center, int radius, Color edgeColor, Color fillColor, boolean selected) {
+		this(center, radius, edgeColor, fillColor);
+		this.selected = selected;
 	}
 	
 	public double area() {
@@ -46,7 +57,7 @@ public class Circle extends Shape {
 
 	@Override
 	public String toString() {
-		return "center = " + this.getCenter().toString() + ", radius = " + this.radius;
+		return "Center = " + this.getCenter().toString() + ", Radius = " + this.radius;
 	}
 	
 	@Override
@@ -67,11 +78,19 @@ public class Circle extends Shape {
 		return this.getCenter().distance(point.getX(), point.getY()) <= this.radius;
 	}
 	
+	public void fill(Graphics g) {
+		g.setColor(this.fillColor);
+		g.fillOval(this.center.getX() - this.radius + 1, this.center.getY() - this.radius + 1,
+				this.radius * 2 - 2, this.radius * 2 - 2);
+	}
+	
 	public void draw(Graphics g) {
 		int xRect = this.center.getX() - this.radius;
 		int yRect = this.center.getY() - this.radius;
 		int a = 2 * this.radius;
+		g.setColor(this.color);
 		g.drawOval(xRect, yRect, a, a);
+		this.fill(g);
 		if (this.isSelected()) {
 			g.setColor(Color.BLUE);
 			g.drawRect(this.center.getX() - 2, this.center.getY() - 2, 4, 4);

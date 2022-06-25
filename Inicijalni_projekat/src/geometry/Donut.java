@@ -11,14 +11,25 @@ public class Donut extends Circle {
 		super();
 	}
 	
-	public Donut(Point center, int innerRadius, int radius) {
+	public Donut(Point center, int radius, int innerRadius) {
 		super(center, radius);
 		this.innerRadius = innerRadius;
 	}
 	
+	public Donut(Point center, int radius, int innerRadius, Color edgeColor, Color fillColor) {
+		this(center, radius, innerRadius);
+		this.color = edgeColor;
+		this.fillColor = fillColor;
+	}
+	
 	public Donut(Point center, int radius, int innerRadius, boolean selected) {
 		this(center, innerRadius, radius);
-		this.setSelected(selected);
+		this.selected = selected;
+	}
+	
+	public Donut(Point center, int radius, int innerRadius, Color edgeColor, Color fillColor, boolean selected) {
+		this(center, radius, innerRadius, edgeColor, fillColor);
+		this.selected = selected;
 	}
 	
 	public int getInnerRadius() {
@@ -59,12 +70,24 @@ public class Donut extends Circle {
 		return super.contains(p) && this.getCenter().distance(p.getX(), p.getY()) >= this.innerRadius;
 	}
 	
+	public void fill(Graphics g) {
+		g.setColor(this.fillColor);
+		super.fill(g);
+		g.setColor(Color.WHITE);
+		g.fillOval(getCenter().getX() - this.innerRadius + 1,
+					getCenter().getY() - this.innerRadius + 1,
+					this.innerRadius * 2 - 2,
+					this.innerRadius * 2 - 2);
+	}
+	
 	public void draw(Graphics g) {
 		super.draw(g);
+		this.fill(g);
 		int xRect = this.getCenter().getX() - this.innerRadius;
 		int yRect = this.getCenter().getY() - this.innerRadius;
-		int a = this.innerRadius*2;
-		g.drawOval(xRect, yRect, a, a);
+		int a = this.innerRadius * 2;
+		g.setColor(this.color);
+		g.drawOval(xRect, yRect, a, a);	
 		if (this.isSelected()) {
 			g.setColor(Color.BLUE);
 			g.drawRect(this.getCenter().getX() - 2, this.getCenter().getY() - 2, 4, 4);

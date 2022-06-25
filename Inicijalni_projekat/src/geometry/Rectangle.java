@@ -3,7 +3,7 @@ package geometry;
 import java.awt.Color;
 import java.awt.Graphics;
 
-public class Rectangle extends Shape {
+public class Rectangle extends Shape2D {
 	private Point upperLeftPoint;
 	private int height;
 	private int width;
@@ -20,6 +20,17 @@ public class Rectangle extends Shape {
 	
 	public Rectangle(Point upperLeftPoint, int height, int width, boolean selected) {
 		this(upperLeftPoint, height, width);
+		this.selected = selected;
+	}
+	
+	public Rectangle(Point upperLeftPoint, int height, int width, Color edgeColor, Color fillColor) {
+		this(upperLeftPoint, height, width);
+		this.color = edgeColor;
+		this.fillColor = fillColor;
+	}
+	
+	public Rectangle(Point upperLeftPoint, int height, int width, Color edgeColor, Color fillColor, boolean selected) {
+		this(upperLeftPoint, height, width, edgeColor, fillColor);
 		this.selected = selected;
 	}
 	
@@ -87,8 +98,16 @@ public class Rectangle extends Shape {
 		return false;
 	}
 	
+	@Override
+	public void fill(Graphics g) {
+		g.setColor(getFillColor());
+		g.fillRect(this.upperLeftPoint.getX() + 1, this.upperLeftPoint.getY() + 1, this.width - 1, this.height - 1);
+	}
+	
 	public void draw(Graphics g) {
+		g.setColor(this.color);
 		g.drawRect(this.upperLeftPoint.getX(), this.upperLeftPoint.getY(), this.width, this.height);
+		this.fill(g);
 		if(this.isSelected()) {
 			g.setColor(Color.blue);
 			g.drawRect(this.upperLeftPoint.getX() - 2, this.upperLeftPoint.getY() - 2, 4, 4);
@@ -109,9 +128,9 @@ public class Rectangle extends Shape {
 	}
 	
 	@Override
-	public int compareTo(Object o) {
-		if (o instanceof Rectangle) {
-			return (int) (this.area() - ((Rectangle) o).area());
+	public int compareTo(Object obj) {
+		if (obj instanceof Rectangle) {
+			return (int) (this.area() - ((Rectangle) obj).area());
 		}
 		return 0;
 	}

@@ -16,13 +16,18 @@ public class Line extends Shape {
 		this.endPoint = endPoint;
 	}
 	
-	public Line(Point startPoint, Point endPoint, boolean selected) {
+	public Line(Point startPoint, Point endPoint, Color color) {
 		this(startPoint, endPoint);
+		this.color = color;
+	}
+	
+	public Line(Point startPoint, Point endPoint, Color color, boolean selected) {
+		this(startPoint, endPoint, color);
 		this.selected = selected;	
 	}
 	
 	public double length() {
-		return this.endPoint.distance(this.startPoint.getX(), this.endPoint.getY());
+		return this.endPoint.distance(this.startPoint.getX(), this.startPoint.getY());
 	}
 
 	public Point getStartPoint() {
@@ -67,11 +72,12 @@ public class Line extends Shape {
 	}
 	
 	public void draw(Graphics g) {
+		g.setColor(this.color);
 		g.drawLine(this.startPoint.getX(), this.getStartPoint().getY(), this.endPoint.getX(), this.endPoint.getY());
 		if(this.isSelected()) {
 			g.setColor(Color.BLUE);
-			g.drawRect(this.startPoint.getX()-2, this.startPoint.getY()-2, 4, 4);
-			g.drawRect(this.endPoint.getX()-2, this.endPoint.getY()-2, 4, 4);
+			g.drawRect(this.startPoint.getX() - 2, this.startPoint.getY() - 2, 4, 4);
+			g.drawRect(this.endPoint.getX() - 2, this.endPoint.getY() - 2, 4, 4);
 			g.setColor(Color.black);
 		}
 	}
@@ -89,7 +95,7 @@ public class Line extends Shape {
 	@Override
 	public int compareTo(Object obj) {
 		if(obj instanceof Line) {
-			return (int)(this.length()-((Line)obj).length());
+			return (int)(this.length() - ((Line)obj).length());
 		}
 		return 0;
 	}
