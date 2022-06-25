@@ -276,4 +276,8 @@ public class DlgDonut extends JDialog {
 		textFieldY.setText("" + center.getY());
 	}
 
+	public JTextField getTextFieldInner() {		
+		return this.textFieldInner;
+	}
+
 }

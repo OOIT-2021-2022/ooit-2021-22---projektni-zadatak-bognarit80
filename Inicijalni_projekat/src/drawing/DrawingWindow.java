@@ -18,8 +18,6 @@ import javax.swing.JButton;
 import javax.swing.JToggleButton;
 import java.awt.Font;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-
 import java.awt.Insets;
 
 import geometry.Circle;
@@ -376,10 +374,6 @@ public class DrawingWindow extends JFrame {
 				//store the coords of our click in clickPos
 				Point clickPos = new Point(e.getX(), e.getY());				
 				
-				if (SwingUtilities.isMiddleMouseButton(e)) {
-					pnlDrawing.deleteAt(clickPos);
-				}
-				
 				//ctrl selects objects regardless of select btn state
 				//also allows multiple objects selection
 				if (e.isControlDown()) {
@@ -486,6 +480,7 @@ public class DrawingWindow extends JFrame {
 					DlgDonut dlgDonut = new DlgDonut();
 					dlgDonut.setPoint(clickPos);
 					dlgDonut.setColors(edgeColor, fillColor);
+					EventQueue.invokeLater( () -> dlgDonut.getTextFieldInner().requestFocusInWindow() );
 					dlgDonut.setVisible(true);
 					if (dlgDonut.getDonut() != null) {
 						pnlDrawing.addShape(dlgDonut.getDonut());
